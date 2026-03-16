@@ -54,3 +54,50 @@ Quantos anti-patterns você consegue identificar no código dele disponibilizado
   - Por que é ruim: Se o ID não existir no banco de dados, o .get() lançará uma exceção resultando em um erro HTTP não tratado.
 
   - Como corrigir: Utilizar .orElseThrow(() -> new EntityNotFoundException("Customer not found")) e tratar a exceção em um @ControllerAdvice para retornar um HTTP 404 (Not Found).
+
+## Falta de Estratégia de Geração de ID:
+  - Onde: A entidade Customer possui @Id, mas não possui @GeneratedValue.
+
+  - Por que é ruim: O JPA não saberá como gerar o ID automaticamente no banco de dados, obrigando o desenvolvedor a gerenciar os IDs manualmente.
+
+  - Como corrigir: Adicione o @GeneratedValue e defina qual será a strategy utilizada (UUID, Sequencia, etc...).
+
+## Uso de Setters (Modelo Anêmico)
+
+  - Onde: Na entidade Customer.
+
+  - Por que é ruim: Criar setters para todos os atributos quebra o encapsulamento e transforma a classe em um "Modelo Anêmico". Se qualquer classe pode alterar o estado interno da entidade diretamente, qual é o intuito do atributo ser private?
+
+  - Como corrigir: Remover os setters. Exigir os dados obrigatórios no momento da criação através de um Construtor rico, e criar métodos de negócio para alterações de estado específicas (ex: updatePassword(String newPassword)).
+
+## SQL Injection (Injeção de SQL):
+
+  - Onde: Nos métodos getRoleByEntityType e getSecretsById, as queries são montadas via concatenação de Strings (ex: "... WHERE entity_type = '" + entityType + "'").
+
+   - Por que é ruim: Se um usuário mal-intencionado enviar um entityType com o valor ' OR '1'='1, ele burla a segurança do banco, caracterizando uma falha crítica.
+
+   - Como corrigir: Sempre utilizar PreparedStatement passando os parâmetros dinâmicos (com ?), ou utilizar o Spring Data JPA/Hibernate.
+
+## Credenciais e Configurações Hardcoded:
+
+  - Onde: No topo da classe (chatBaseUrl, headers) e na URL de conexão do banco ("user", "pass").
+
+  - Por que é ruim: Senhas e tokens no código são expostos no controle de versão e se a senha mudar exige um novo deploy da aplicação inteira.
+
+  - Como corrigir: Injetar esses valores através do application.yml do Spring usando @Value ou ler diretamente de variáveis de ambiente.
+
+## Violação do Princípio da Inversão de Dependência (DIP - SOLID):
+
+  - Onde: Injeção direta de classes concretas (ex: RegistrationService sendo injetado diretamente no Controller/Manager) sem o uso de Interfaces.
+
+  - Por que é ruim: Gera alto acoplamento e o Controller passa a conhecer detalhes da implementação do Service. Isso dificulta os testes e impede que tenhamos múltiplas estratégias para a mesma ação (Strategy e Adapter). 
+
+  - Como corrigir: O Controller deve depender de abstrações (Interfaces, ex: RegistrationUseCase).
+
+## Falta de Separação de Camadas (Screaming Architecture):
+
+  - Onde: A pasta endpoints/registration mistura Customer (Domínio/Entidade), CustomerRepository (Infraestrutura/Banco), RegistrationService (Aplicação) e RegistrationController (Apresentação/Web) no mesmo nível.
+
+  - Por que é ruim: Quebra a separação de responsabilidades. Regras de negócio ficam engessadas junto com anotações de infraestrutura (JPA e Web).
+
+  - Como corrigir: Adotar uma organização em camadas (Arquitetura Hexagonal, Clean Architecture ou MVC bem definido), separando os artefatos em pacotes como domain, application, infrastructure e presentation.

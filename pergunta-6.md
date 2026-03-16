@@ -1,3 +1,8 @@
+6) Ajude-nos fazendo o ‘Code Review’ do código Java de um robô/rotina que exporta os dados da tabela “users” de tempos em tempos. O código foi disponibilizado na pasta bot. ATENÇÃO: Não é necessário implementar as revisões, basta apenas anotá-las em um arquivo texto ou em forma de comentários no código.
+
+### Resposta:
+O code review está em forma de comentários no código.
+
 ```java
 package com.shipay.challenge.bot;
 

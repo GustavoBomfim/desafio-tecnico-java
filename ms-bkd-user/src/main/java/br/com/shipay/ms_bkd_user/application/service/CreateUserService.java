@@ -7,9 +7,11 @@ import br.com.shipay.ms_bkd_user.domain.exceptions.ResourceNotFoundException;
 import br.com.shipay.ms_bkd_user.domain.model.RoleDomain;
 import br.com.shipay.ms_bkd_user.domain.model.UserDomain;
 import br.com.shipay.ms_bkd_user.infraestructure.rest.dto.request.UserCreateRequestDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class CreateUserService implements CreateUserUseCase {
 
     private final RoleRepositoryPort roleRepositoryPort;
@@ -24,7 +26,15 @@ public class CreateUserService implements CreateUserUseCase {
     public UserDomain execute(UserCreateRequestDTO requestDTO) {
 
         RoleDomain role = roleRepositoryPort.findById(requestDTO.roleId())
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+                .orElseThrow(() -> {
+                    log.warn("Falha na criação de usuário: RoleID {} não encontrada", requestDTO.roleId());
+                    return new ResourceNotFoundException("Role not found");
+                });
+
+        if (userRepositoryPort.existsByEmail(requestDTO.email())) {
+            log.warn("Falha na criação: Tentativa de cadastro com e-mail já existente.");
+            throw new IllegalArgumentException("Email already exists");
+        }
 
         UserDomain userDomain = UserDomain.create(requestDTO.name(), requestDTO.email(), requestDTO.password(), role);
 

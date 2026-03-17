@@ -25,4 +25,9 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
         return UserMapper.toDomain(userSaved);
     }
+
+    @Override
+    public boolean existsByEmail(String email){
+        return userRepository.existsByEmail(email);
+    }
 }

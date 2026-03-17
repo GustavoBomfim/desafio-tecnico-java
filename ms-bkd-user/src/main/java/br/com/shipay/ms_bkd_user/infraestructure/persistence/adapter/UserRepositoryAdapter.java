@@ -7,6 +7,8 @@ import br.com.shipay.ms_bkd_user.infraestructure.persistence.mapper.UserMapper;
 import br.com.shipay.ms_bkd_user.infraestructure.persistence.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class UserRepositoryAdapter implements UserRepositoryPort {
 
@@ -29,5 +31,10 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     @Override
     public boolean existsByEmail(String email){
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Optional<UserDomain> findById(Long id) {
+        return userRepository.findById(id).map(UserMapper::toDomain);
     }
 }

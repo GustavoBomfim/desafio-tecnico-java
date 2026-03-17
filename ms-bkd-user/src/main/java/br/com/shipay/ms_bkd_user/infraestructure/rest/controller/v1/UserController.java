@@ -1,6 +1,7 @@
 package br.com.shipay.ms_bkd_user.infraestructure.rest.controller.v1;
 
 import br.com.shipay.ms_bkd_user.application.port.in.CreateUserUseCase;
+import br.com.shipay.ms_bkd_user.application.port.in.GetUserByIdUseCase;
 import br.com.shipay.ms_bkd_user.domain.model.UserDomain;
 import br.com.shipay.ms_bkd_user.infraestructure.rest.dto.request.UserCreateRequestDTO;
 import br.com.shipay.ms_bkd_user.infraestructure.rest.dto.response.UserResponseDTO;
@@ -8,10 +9,7 @@ import br.com.shipay.ms_bkd_user.infraestructure.rest.mapper.UserRestMapper;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -22,9 +20,11 @@ import java.net.URI;
 public class UserController {
 
     private final CreateUserUseCase createUserUseCase;
+    private final GetUserByIdUseCase getUserByIdUseCase;
 
-    public UserController(CreateUserUseCase createUserUseCase){
+    public UserController(CreateUserUseCase createUserUseCase, GetUserByIdUseCase getUserByIdUseCase){
         this.createUserUseCase = createUserUseCase;
+        this.getUserByIdUseCase = getUserByIdUseCase;
     }
 
     @PostMapping
@@ -38,5 +38,14 @@ public class UserController {
 
         log.info("Usuário criado com sucesso: {}", responseDTO.id());
         return ResponseEntity.created(uri).body(responseDTO);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
+        log.info("Recebendo requisição para buscar usuário por ID: {}", id);
+        
+        UserDomain userDomainOptional = getUserByIdUseCase.findById(id);
+
+        return ResponseEntity.ok(UserRestMapper.toUserResponseDTO(userDomainOptional));
     }
 }

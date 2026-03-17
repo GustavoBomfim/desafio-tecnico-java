@@ -27,8 +27,7 @@ public class CreateUserService implements CreateUserUseCase {
 
         UserDomain userDomain = UserDomain.create(requestDTO.name(), requestDTO.email(), requestDTO.password(), role);
 
-        UserDomain userSaved = userRepositoryPort.save(userDomain);
+        return  userRepositoryPort.save(userDomain);
 
-        return null;
     }
 }

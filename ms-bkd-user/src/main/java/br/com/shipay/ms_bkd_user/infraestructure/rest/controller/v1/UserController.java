@@ -1,4 +1,4 @@
-package br.com.shipay.ms_bkd_user.infraestructure.rest.controller;
+package br.com.shipay.ms_bkd_user.infraestructure.rest.controller.v1;
 
 import br.com.shipay.ms_bkd_user.application.port.in.CreateUserUseCase;
 import br.com.shipay.ms_bkd_user.domain.model.UserDomain;

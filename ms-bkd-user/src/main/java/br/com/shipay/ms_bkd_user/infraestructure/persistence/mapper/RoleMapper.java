@@ -9,4 +9,10 @@ public class RoleMapper {
         return RoleDomain.restore(roleEntity.getId(), roleEntity.getDescription());
     }
 
+    public static RoleEntity toEntity(RoleDomain role) {
+        return new RoleEntity(
+                role.getId(),
+                role.getDescription()
+        );
+    }
 }

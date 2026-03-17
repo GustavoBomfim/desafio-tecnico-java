@@ -18,7 +18,8 @@ public class RoleEntity {
     private String description;
 
 
-    public RoleEntity(String description) {
+    public RoleEntity(Integer id, String description) {
+        this.id = id;
         this.description = description;
     }
 }

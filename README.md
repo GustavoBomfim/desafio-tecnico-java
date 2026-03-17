@@ -12,10 +12,10 @@ Abaixo estão os links rápidos para cada uma das questões abordadas no desafio
 * [Pergunta 2 - Resiliência e Mensageria (Transactional Outbox e Batch D+1)](pergunta-2.md)
 * [Pergunta 3 - Estratégia de Testes para Alta Disponibilidade (SRE)](pergunta-3.md)
 * [Pergunta 4 - Code Review: Mentoria, Anti-patterns e Arquitetura Spring Boot](pergunta-4.md)
+* [Pergunta 5 - API REST (Clean Code): Mapeamento de Usuários, Roles e Claims](./ms-bkd-user)
 * [Pergunta 6 - Code Review: Segurança, LGPD e Vazamento de Recursos (Bot)](pergunta-6.md)
 * [Pergunta 7 - Design Patterns aplicados a Serviços de Terceiros (Strategy/Adapter)](pergunta-7.md)
 
-> **⚠️ Nota de Alinhamento (Pergunta 5):** > Conforme alinhamento prévio com o time de recrutamento, a **Pergunta 5** (Implementação do código da API CRUD) não foi incluída neste repositório, para priorizarmos a entrega e as discussões arquiteturais aprofundadas presentes nas demais questões. Estou à disposição para debatermos a implementação dessa API (usando DTOs, Records e Controller Advice) durante a nossa entrevista técnica.
 
 ## 🛠️ Principais Conceitos Abordados neste Desafio
 
